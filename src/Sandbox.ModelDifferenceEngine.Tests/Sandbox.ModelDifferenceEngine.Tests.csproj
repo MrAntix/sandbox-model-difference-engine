@@ -51,9 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="comparison_tests.cs" />
     <Compile Include="difference_tests.cs" />
     <Compile Include="snapshot_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Output.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

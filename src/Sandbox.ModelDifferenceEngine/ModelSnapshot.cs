@@ -8,12 +8,12 @@ namespace Sandbox.ModelDifferenceEngine
 {
     public class ModelSnapshot
     {
-        readonly IDictionary<Type, Func<object, object, bool>> _comparers;
+        readonly IDictionary<Type, Func<object, object, bool>> _comparisons;
         readonly IDictionary<string, object> _dictionary;
 
         public ModelChange[] GetChanges(object data)
         {
-            var args = new ToDictionaryArguments(_comparers, _dictionary);
+            var args = new ToDictionaryArguments(_comparisons, _dictionary);
 
             ToDictionary(
                 data, null, string.Empty,
@@ -25,10 +25,10 @@ namespace Sandbox.ModelDifferenceEngine
 
         public ModelSnapshot(
             object data,
-            IDictionary<Type, Func<object, object, bool>> comparers)
+            IDictionary<Type, Func<object, object, bool>> comparisons)
         {
-            _comparers = comparers;
-            _dictionary = ToDictionary(data, comparers);
+            _comparisons = comparisons;
+            _dictionary = ToDictionary(data, comparisons);
         }
 
         public static IDictionary<string, object> ToDictionary(
