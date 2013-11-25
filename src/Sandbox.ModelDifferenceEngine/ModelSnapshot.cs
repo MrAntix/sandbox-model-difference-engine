@@ -89,7 +89,7 @@ namespace Sandbox.ModelDifferenceEngine
 
             if (Equals(data, null)) return;
 
-            if (dataType.IsPrimitive 
+            if (dataType.IsPrimitive
                 || dataType == typeof (string)
                 || args.Visited.Contains(data)) return;
 
@@ -245,9 +245,16 @@ namespace Sandbox.ModelDifferenceEngine
 
                 type = type ?? a.GetType();
 
-                return _comparers.ContainsKey(type)
-                           ? _comparers[type](a, b)
-                           : Equals(a, b);
+                if (!_comparers.ContainsKey(type))
+                {
+                    var assignable = _comparers.Keys
+                                               .FirstOrDefault(t => t.IsAssignableFrom(type));
+                    _comparers.Add(type, assignable == null
+                                             ? Equals
+                                             : _comparers[assignable]);
+                }
+
+                return _comparers[type](a, b);
             }
         }
     }

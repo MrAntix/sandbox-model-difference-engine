@@ -65,10 +65,34 @@ namespace Sandbox.ModelDifferenceEngine.Tests
             Assert.Equal("[0].Is", result.ElementAt(0).Path);
         }
 
-        class A
+        [Fact]
+        public void name_comparison_by_interface()
+        {
+            var data = new List<A> { new A { Name = "one" }, new A { Name = "two" } };
+
+            var audit = new ModelDifference()
+                .RegisterComparison<IHasName, string>(a => a.Name);
+
+            var snapshot = audit.Snapshot(data);
+
+            data.RemoveAt(0);
+            data.Add(new A { Name = "one" });
+
+            var result = snapshot.GetChanges(data);
+            Output.WriteLine(result);
+
+            Assert.Equal(0, result.Count());
+        }
+
+        class A : IHasName
         {
             public string Name { get; set; }
             public bool Is { get; set; }
+        }
+
+        interface IHasName
+        {
+            string Name { get; }
         }
     }
 }
